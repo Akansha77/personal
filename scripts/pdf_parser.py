@@ -70,50 +70,55 @@ class PDFParser:
     def parse_pdf(self, pdf_path: str) -> Optional[DocumentData]:
         """Parse PDF and extract structured text data."""
         try:
-            doc = fitz.open(pdf_path)
-            
-            if doc.page_count == 0:
-                logger.warning(f"PDF has no pages: {pdf_path}")
-                return None
-            
-            # Extract title from metadata or first page
-            title = self._extract_title(doc)
-            
-            # Extract all text blocks
-            text_blocks = []
-            font_sizes = []
-            font_counts = {}
-            
-            for page_num in range(min(doc.page_count, 50)):  # Limit to 50 pages
-                page = doc[page_num]
-                blocks = self._extract_page_blocks(page, page_num + 1)
-                text_blocks.extend(blocks)
+            logger.info(f"Starting to parse PDF: {pdf_path}")
+            with fitz.open(pdf_path) as doc:
+                if doc.page_count == 0:
+                    logger.warning(f"PDF has no pages: {pdf_path}")
+                    return None
+
+                title = self._extract_title(doc)
+                logger.debug(f"Extracted title: {title}")
+
+                text_blocks = []
+                font_sizes = []
+                font_counts = {}
+
+                # Process pages with progress indication
+                max_pages = min(doc.page_count, 50)
+                logger.debug(f"Processing {max_pages} pages")
                 
-                # Collect font statistics
-                for block in blocks:
-                    font_sizes.append(block.font_size)
-                    font_counts[block.font_name] = font_counts.get(block.font_name, 0) + 1
-            
-            doc.close()
-            
-            if not text_blocks:
-                logger.warning(f"No text blocks found in PDF: {pdf_path}")
-                return None
-            
-            # Calculate average font size
-            avg_font_size = sum(font_sizes) / len(font_sizes) if font_sizes else 12.0
-            
-            return DocumentData(
-                title=title,
-                text_blocks=text_blocks,
-                page_count=min(doc.page_count, 50),
-                avg_font_size=avg_font_size,
-                common_fonts=font_counts
-            )
-            
+                for page_num in range(max_pages):
+                    try:
+                        page = doc[page_num]
+                        blocks = self._extract_page_blocks(page, page_num + 1)
+                        text_blocks.extend(blocks)
+
+                        for block in blocks:
+                            font_sizes.append(block.font_size)
+                            font_counts[block.font_name] = font_counts.get(block.font_name, 0) + 1
+                    except Exception as e:
+                        logger.warning(f"Error processing page {page_num + 1}: {str(e)}")
+                        continue
+
+                if not text_blocks:
+                    logger.warning(f"No text blocks found in PDF: {pdf_path}")
+                    return None
+
+                avg_font_size = sum(font_sizes) / len(font_sizes) if font_sizes else 12.0
+                logger.debug(f"Found {len(text_blocks)} text blocks, avg font size: {avg_font_size:.2f}")
+
+                return DocumentData(
+                    title=title,
+                    text_blocks=text_blocks,
+                    page_count=max_pages,
+                    avg_font_size=avg_font_size,
+                    common_fonts=font_counts
+                )
+
         except Exception as e:
             logger.error(f"Error parsing PDF {pdf_path}: {str(e)}")
             return None
+
     
     def _extract_title(self, doc: fitz.Document) -> str:
         """Extract document title from metadata or first page."""
@@ -192,4 +197,54 @@ class PDFParser:
         except Exception as e:
             logger.error(f"Error extracting blocks from page {page_num}: {str(e)}")
         
-        return blocks
+        # Post-process to combine standalone numbered sections with their following text
+        processed_blocks = self._combine_numbered_sections(blocks)
+        
+        return processed_blocks
+
+    def _combine_numbered_sections(self, blocks: List[TextBlock]) -> List[TextBlock]:
+        """Combine standalone numbered sections like '1.' with their following text."""
+        if not blocks:
+            return blocks
+            
+        processed = []
+        i = 0
+        
+        while i < len(blocks):
+            current_block = blocks[i]
+            
+            # Check if this is a standalone numbered section (1., 2., 3., 4.)
+            if (current_block.text.strip() in ['1.', '2.', '3.', '4.'] and 
+                i + 1 < len(blocks)):
+                
+                # Look for the next text block that could be the heading title
+                next_block = blocks[i + 1]
+                
+                # Check if the next block is close vertically and is likely a heading
+                if (next_block.page_num == current_block.page_num and
+                    next_block.font_size >= 12.0 and  # Reasonable heading size
+                    len(next_block.text.strip()) > 3):  # Not too short
+                    
+                    # Combine them into a single heading
+                    combined_text = f"{current_block.text.strip()} {next_block.text.strip()}"
+                    
+                    # Create combined block using the properties of the larger text
+                    combined_block = TextBlock(
+                        text=combined_text,
+                        page_num=current_block.page_num,
+                        bbox=current_block.bbox,
+                        font_name=next_block.font_name,
+                        font_size=max(current_block.font_size, next_block.font_size),
+                        font_flags=next_block.font_flags,
+                        line_height=max(current_block.line_height, next_block.line_height)
+                    )
+                    
+                    processed.append(combined_block)
+                    i += 2  # Skip both blocks
+                    continue
+            
+            # If not combining, just add the current block
+            processed.append(current_block)
+            i += 1
+            
+        return processed

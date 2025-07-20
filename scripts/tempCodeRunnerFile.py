@@ -27,19 +27,6 @@ def process_pdf_file(input_path: str, output_path: str) -> bool:
     """Process a single PDF file and extract its outline."""
     try:
         start_time = time.time()
-        logger.info(f"Starting processing: {os.path.basename(input_path)}")
-        
-        # Validate input file
-        if not os.path.exists(input_path):
-            logger.error(f"Input file does not exist: {input_path}")
-            return False
-            
-        file_size = os.path.getsize(input_path)
-        if file_size == 0:
-            logger.error(f"Input file is empty: {input_path}")
-            return False
-            
-        logger.debug(f"Processing PDF file: {file_size} bytes")
         
         # Parse PDF
         parser = PDFParser()
@@ -49,35 +36,25 @@ def process_pdf_file(input_path: str, output_path: str) -> bool:
             logger.error(f"Failed to parse PDF: {input_path}")
             return False
         
-        logger.debug(f"Parsed PDF with {document_data.page_count} pages, {len(document_data.text_blocks)} text blocks")
-        
         # Detect headings
         detector = HeadingDetector()
         headings = detector.detect_headings(document_data)
-        
-        if not headings:
-            logger.warning(f"No headings detected in: {input_path}")
-            # Still create output with empty outline
-            headings = []
         
         # Extract structured outline
         extractor = OutlineExtractor()
         outline = extractor.create_outline(document_data, headings)
         
-        # Ensure output directory exists
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        
-        # Save to JSON with proper encoding
+        # Save to JSON
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(outline, f, indent=2, ensure_ascii=False)
         
         processing_time = time.time() - start_time
-        logger.info(f"✅ Processed {os.path.basename(input_path)} in {processing_time:.2f}s → {len(outline['outline'])} headings")
+        logger.info(f"Processed {input_path} in {processing_time:.2f}s")
         
         return True
         
     except Exception as e:
-        logger.error(f"❌ Error processing {input_path}: {str(e)}")
+        logger.error(f"Error processing {input_path}: {str(e)}")
         return False
 
 def main():
