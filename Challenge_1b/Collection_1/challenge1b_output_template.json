@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "input_documents": ["doc1.pdf", "doc2.pdf", "doc3.pdf"],
+    "persona": "PhD Researcher in Computational Biology",
+    "job_to_be_done": "Prepare a comprehensive literature review focusing on methodologies, datasets, and performance benchmarks",
+    "processing_timestamp": "2025-01-22T10:30:00Z"
+  },
+  "extracted_sections": [
+    {
+      "document": "doc1.pdf",
+      "page_number": 3,
+      "section_title": "Graph Neural Network Architectures for Drug Discovery",
+      "importance_rank": 1
+    },
+    {
+      "document": "doc2.pdf", 
+      "page_number": 5,
+      "section_title": "Performance Benchmarks on Molecular Datasets",
+      "importance_rank": 2
+    },
+    {
+      "document": "doc3.pdf",
+      "page_number": 2,
+      "section_title": "Methodology: Graph Convolutional Networks",
+      "importance_rank": 3
+    }
+  ],
+  "sub_section_analysis": [
+    {
+      "document": "doc1.pdf",
+      "refined_text": "This section presents novel graph neural network architectures specifically designed for molecular property prediction and drug-target interaction modeling...",
+      "page_number": 3
+    },
+    {
+      "document": "doc2.pdf",
+      "refined_text": "We evaluate our approach on standard molecular benchmarks including BACE, BBBP, and ClinTox datasets, achieving state-of-the-art performance...",
+      "page_number": 5
+    }
+  ]
+}

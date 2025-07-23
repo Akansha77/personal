@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "input_documents": [
+      "Learn Acrobat - Create and Convert_1.pdf",
+      "Learn Acrobat - Create and Convert_2.pdf",
+      "Learn Acrobat - Edit_1.pdf",
+      "Learn Acrobat - Edit_2.pdf",
+      "Learn Acrobat - Export_1.pdf",
+      "Learn Acrobat - Export_2.pdf",
+      "Learn Acrobat - Fill and Sign.pdf",
+      "Learn Acrobat - Generative AI_1.pdf",
+      "Learn Acrobat - Generative AI_2.pdf",
+      "Learn Acrobat - Request e-signatures_1.pdf",
+      "Learn Acrobat - Request e-signatures_2.pdf",
+      "Learn Acrobat - Share_1.pdf",
+      "Learn Acrobat - Share_2.pdf",
+      "Test Your Acrobat Exporting Skills.pdf",
+      "The Ultimate PDF Sharing Checklist.pdf"
+    ],
+    "persona": "HR professional",
+    "job_to_be_done": "Create and manage fillable forms for onboarding and compliance.",
+    "processing_timestamp": "2025-07-23T20:35:19.347640"
+  },
+  "extracted_sections": [
+    {
+      "document": "Learn Acrobat - Create and Convert_1.pdf",
+      "page_number": 14,
+      "section_title": "2. Select Add-Ins on the left side of the dialog box.",
+      "importance_rank": 1
+    },
+    {
+      "document": "Learn Acrobat - Create and Convert_2.pdf",
+      "page_number": 16,
+      "section_title": "Adobe PDF",
+      "importance_rank": 2
+    },
+    {
+      "document": "Learn Acrobat - Edit_1.pdf",
+      "page_number": 13,
+      "section_title": "Edit images or objects in a PDF",
+      "importance_rank": 3
+    },
+    {
+      "document": "Learn Acrobat - Edit_2.pdf",
+      "page_number": 8,
+      "section_title": "1. Open both PDFs and display them alongside each other.",
+      "importance_rank": 4
+    },
+    {
+      "document": "Learn Acrobat - Export_1.pdf",
+      "page_number": 26,
+      "section_title": "Overview",
+      "importance_rank": 5
+    }
+  ],
+  "subsection_analysis": [
+    {
+      "document": "Learn Acrobat - Create and Convert_1.pdf",
+      "refined_text": "Convert a file to PDF using PDFMaker In Windows, Acrobat installs both an Acrobat PDFMaker toolbar and an Adobe PDF menu in many popular authoring applications. You can use either the toolbar buttons or the Adobe PDF menu (the Action menu in Lotus Notes) to create PDFs, but the menu also provides access to conversion settings. Although many of the conversion options are common to all authoring applications, a few are application-specific. For Microsoft Office applications such as Word, Excel, an...",
+      "page_number": 14
+    },
+    {
+      "document": "Learn Acrobat - Create and Convert_2.pdf",
+      "refined_text": "Choose an output folder for the converted PDF, or click Browse to add or change the output of conversion. Adobe PDF Page Size menu Select a custom page size that you have defined. Replace Existing PDF Choose if you want to replace the existing PDF Always Ask Everytime, or Never replace. View Adobe PDF Results Automatically starts Acrobat and displays the converted document immediately. Add Document Information Includes information such as the filename and date and time of creation. Rely On Syste...",
+      "page_number": 16
+    },
+    {
+      "document": "Learn Acrobat - Edit_1.pdf",
+      "refined_text": "About editing text and images Adobe Acrobat provides powerful tools and capabilities for editing PDF images and text. You might encounter formatting challenges that require manual adjustments. Acrobat's image-editing capabilities are limited, and using high-resolution images can lead to performance issues due to larger file sizes. To address this, improve images using other tools before adding them to PDF documents. If the original font isn't available, font substitutions may occur, altering the...",
+      "page_number": 13
+    },
+    {
+      "document": "Learn Acrobat - Edit_2.pdf",
+      "refined_text": "Move or copy pages in a PDF To copy or move pages within a document, use the page thumbnails in the right navigation pane or the document area. You can also transfer pages between documents using these thumbnails. In the Organize Pages view, drag and drop thumbnails to rearrange pages, or select a thumbnail and copy it as needed. Move or copy a page 1. Open the PDF in Acrobat, and select All tools Organize pages The page thumbnails are displayed in the Document area. 2. Select one or more page t...",
+      "page_number": 8
+    },
+    {
+      "document": "Learn Acrobat - Export_1.pdf",
+      "refined_text": "For PDF to PNG conversion settings, go to File format options for PDF export Acrobat allows you to export images and text selections from a PDF to different file formats. Each format uses unique conversion settings when you export text or image selections. Export images from PDFs Besides exporting the entire document or each page to a different format, you can export each image in a PDF to a separate image file. Note: You can export raster images, but not vector objects. 1. Open the PDF in Acrob...",
+      "page_number": 26
+    }
+  ]
+}

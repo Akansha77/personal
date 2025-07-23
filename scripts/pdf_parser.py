@@ -59,6 +59,7 @@ class DocumentData:
     page_count: int
     avg_font_size: float
     common_fonts: Dict[str, int]
+    file_path: str = ""
 
 class PDFParser:
     """PDF parsing class using PyMuPDF."""
@@ -112,7 +113,8 @@ class PDFParser:
                     text_blocks=text_blocks,
                     page_count=max_pages,
                     avg_font_size=avg_font_size,
-                    common_fonts=font_counts
+                    common_fonts=font_counts,
+                    file_path=pdf_path
                 )
 
         except Exception as e:
